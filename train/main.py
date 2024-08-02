@@ -27,8 +27,8 @@ def create_parser():
     
     
     parser.add_argument('--dataset', default='CATH4.3') # AF2DB_dataset, CATH_dataset
-    parser.add_argument('--model_name', default='E3PiFold', choices=['StructGNN', 'GraphTrans', 'GVP', 'GCA', 'AlphaDesign', 'ESMIF', 'PiFold', 'ProteinMPNN', 'KWDesign', 'E3PiFold'])
-    parser.add_argument('--lr', default=4e-4, type=float, help='Learning rate')
+    parser.add_argument('--model_name', default='PiFold', choices=['StructGNN', 'GraphTrans', 'GVP', 'GCA', 'AlphaDesign', 'ESMIF', 'PiFold', 'ProteinMPNN', 'KWDesign', 'E3PiFold'])
+    parser.add_argument('--lr', default=1e-3, type=float, help='Learning rate')
     parser.add_argument('--lr_scheduler', default='onecycle')
     parser.add_argument('--offline', default=1, type=int)
     parser.add_argument('--seed', default=111, type=int)
@@ -41,7 +41,7 @@ def create_parser():
     parser.add_argument('--data_root', default='./data/')
     
     # Training parameters
-    parser.add_argument('--epoch', default=10, type=int, help='end epoch')
+    parser.add_argument('--epoch', default=1, type=int, help='end epoch')
     parser.add_argument('--augment_eps', default=0.0, type=float, help='noise level')
 
     # Model parameters
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         'accelerator': 'gpu',  # Use distributed data parallel
         'callbacks': load_callbacks(args),
         'logger': plog.WandbLogger(
-                    project = 'E3PiFold',
+                    project = 'PiFold',
                     name=args.ex_name,
                     save_dir=str(os.path.join(args.res_dir, args.ex_name)),
                     offline = args.offline,
@@ -137,3 +137,4 @@ if __name__ == "__main__":
     trainer.fit(model, data_module)
     
     print(trainer_config)
+    trainer.test(datamodule=data_module)

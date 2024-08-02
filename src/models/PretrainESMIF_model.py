@@ -1,8 +1,8 @@
 # import esm
 import torch.nn as nn
 import torch
-# from esm.inverse_folding.util import CoordBatchConverter
-
+from esm.inverse_folding.util import CoordBatchConverter
+import esm
 class PretrainESMIF_Model(nn.Module):
     def __init__(self):
         super(PretrainESMIF_Model, self).__init__()

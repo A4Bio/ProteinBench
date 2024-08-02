@@ -1,3 +1,4 @@
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -137,3 +138,9 @@ esm/*
 sampling/*
 model_zoom/*
 run/
+lightning_logs/*
+StructAE/pdbs/*
+
+# sae_model
+src/modules/pifold_module_sae.py
+src/models/PiFold_sae.py

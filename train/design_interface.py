@@ -9,20 +9,64 @@ from src.interface.model_interface import MInterface_base
 import math
 import torch.nn.functional as F
 from omegaconf import OmegaConf
+import os.path as osp
+
+# class MInterface(MInterface_base):
+#     def __init__(self, model_name=None, loss=None, lr=None, **kargs):
+#         super().__init__()
+#         self.save_hyperparameters()
+#         self.load_model()
+#         # if self.hparams['pretrained_path']:
+#         #     ckpt = torch.load(self.hparams['pretrained_path'])
+#         #     ckpt = {k.replace('_forward_module.model.',''):v for k,v in ckpt.items()}
+#         #     # if 'virtual_atoms' in ckpt:
+#         #     #     ckpt['virtual_atoms'] = ckpt['virtual_atoms'].view(0,3)
+#         #     self.model.load_state_dict(ckpt, strict=False)
+#         self.cross_entropy = nn.NLLLoss(reduction='none')
+#         os.makedirs(os.path.join(self.hparams.res_dir, self.hparams.ex_name), exist_ok=True)
 
 class MInterface(MInterface_base):
     def __init__(self, model_name=None, loss=None, lr=None, **kargs):
         super().__init__()
         self.save_hyperparameters()
-        self.load_model()
+        # self.load_model()
+        
+        if 'KWDesign' in self.hparams.model_name:
+            if self.hparams.load_memory:
+                sv_root = osp.join(self.hparams.res_dir, self.hparams.data_name)
+                os.makedirs(sv_root, exist_ok=True)
+                if self.hparams.augment_eps > 0:
+                    self.hparams.memory_path = osp.join(sv_root, f'memory{self.hparams.augment_eps}.pth')
+                else:
+                    self.hparams.memory_path = osp.join(sv_root, 'memory.pth')
+
+                if os.path.exists(self.hparams.memory_path):
+                    memories = torch.load(self.hparams.memory_path)
+                    self.model.memo_pifold.memory = memories['memo_pifold']
+                    self.model.memo_esmif.memory = memories['memo_esmif']
+
+            if self.hparams.recycle_n > 1:
+                chpt_path = osp.join(self.hparams.res_dir, self.hparams.ex_name, "checkpoints",  f"msa{self.hparams.msa_n}_recycle{self.hparams.recycle_n-1}_epoch{self.hparams.load_epoch}.pth")
+                if os.path.exists(chpt_path):
+                    params = torch.load(chpt_path)
+                    self.model.load_state_dict(params, strict=False)
+
+                    for i in range(self.hparams.recycle_n-1):
+                        submodule = self.model.get_submodule(f"Design{i+1}")
+                        submodule.fix_memory = True
+                        for p in submodule.parameters():
+                            p.requires_grad = False
+
         self.cross_entropy = nn.NLLLoss(reduction='none')
         os.makedirs(os.path.join(self.hparams.res_dir, self.hparams.ex_name), exist_ok=True)
+
 
     def forward(self, batch, mode='train', temperature=1.0):
         if self.hparams.augment_eps>0:
             batch['X'] = batch['X'] + self.hparams.augment_eps * torch.randn_like(batch['X'])
 
         batch = self.model._get_features(batch)
+        batch['recycle_n'] = self.current_epoch//5+1
         results = self.model(batch)
         log_probs, mask = results['log_probs'], batch['mask']
         if len(log_probs.shape) == 3:
@@ -45,7 +89,7 @@ class MInterface(MInterface_base):
 
     def temperature_schedular(self, batch_idx):
         total_steps = self.hparams.steps_per_epoch*self.hparams.epoch
-        
+         
         initial_lr = 1.0
         circle_steps = total_steps//100
         x = batch_idx / total_steps
@@ -59,6 +103,25 @@ class MInterface(MInterface_base):
         new_lr = (1+math.cos(batch_idx/circle_steps*math.pi))/2*linear_decay*initial_lr
 
         return new_lr
+
+    def on_train_epoch_start(self):
+        if 'KWDesign' in self.hparams.model_name:
+            self.prev_memory_len = len(self.model.memo_pifold.memory)
+
+    def on_train_epoch_end(self):
+        with torch.no_grad():
+            if 'KWDesign' in self.hparams.model_name:
+                self._save(name=f"msa{self.hparams.msa_n}_recycle{self.hparams.recycle_n}_epoch{self.current_epoch}")
+                if not os.path.exists(self.hparams.memory_path):
+                    torch.save({"memo_pifold":self.model.memo_pifold.memory, "memo_esmif":self.model.memo_esmif.memory} , self.hparams.memory_path)
+                
+                new_memory_len = len(self.model.memo_pifold.memory)
+                if new_memory_len!=self.prev_memory_len:
+                    torch.save({"memo_pifold":self.model.memo_pifold.memory, "memo_esmif":self.model.memo_esmif.memory} , self.hparams.memory_path)
+    
+    def _save(self, name=''):
+        if 'KWDesign' in self.hparams.model_name:
+            torch.save({key:val for key,val in self.model.state_dict().items() if "GNNTuning" in key}, osp.join(self.hparams.res_dir, name + '.pth'))
     
     #https://lightning.ai/docs/pytorch/1.9.0/notebooks/lightning_examples/basic-gan.html
     def training_step(self, batch, batch_idx, **kwargs):
@@ -66,7 +129,6 @@ class MInterface(MInterface_base):
         self.log('loss', loss, on_step=True, on_epoch=True, prog_bar=True)
         return loss
     
-
 
     def validation_step(self, batch, batch_idx):
         loss, recovery = self(batch)
@@ -100,7 +162,10 @@ class MInterface(MInterface_base):
     def load_model(self):
         params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
         params.update(self.hparams)
-
+        # if self.model is None:
+        #     params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
+        #     params.update(self.hparams)
+            
         if self.hparams.model_name == 'GraphTrans':
             from src.models.graphtrans_model import GraphTrans_Model
             self.model = GraphTrans_Model(params)
@@ -131,14 +196,28 @@ class MInterface(MInterface_base):
         if self.hparams.model_name == 'PiFold':
             from src.models.pifold_model import PiFold_Model
             self.model = PiFold_Model(params)
-
-        # if self.hparams.model_name == 'KWDesign':
-        #     from src.models.kwdesign_model import Design_Model
-        #     self.model = Design_Model(params)
         
-        if self.hparams.model_name == 'E3PiFold':
-            from src.models.E3PiFold_model import E3PiFold
-            self.model = E3PiFold(params)
+        if self.hparams.model_name == 'BlockGAT':
+            from src.models.blockgat_model import BlockGAT_Model
+            self.model = BlockGAT_Model(params)
+
+        if self.hparams.model_name == 'KWDesign':
+            from src.models.kwdesign_model import KWDesign_model
+            from src.models.MemoryPiFold import MemoPiFold_model
+            from src.models.MemoryESMIF import MemoESMIF
+            # memopifold = MemoPiFold_model(params)
+            # memoesmif = MemoESMIF(params)
+            # self.model = KWDesign_model(params, memopifold, memoesmif)
+            self.model = KWDesign_model(params)
+            
+        if self.hparams.model_name == 'KWDesign_BlockGAT':
+            from src.models.kwdesign_model import KWDesign_model
+            from src.models.MemoryBlockGAT import MemoBlockGAT_model
+            from src.models.MemoryESMIF import MemoESMIF
+            memopifold = MemoBlockGAT_model(params, self.hparams.pretrained_blockgat_path)
+            memoesmif = MemoESMIF(pretrained_esm_path = "/gaozhangyang/model_zoom/transformers/esm_if/esm_if1_gvp4_t16_142M_UR50.pt")
+            self.model = KWDesign_model(params, memopifold, memoesmif)
+        
 
     def instancialize(self, Model, **other_args):
         """ Instancialize a model using the corresponding parameters
