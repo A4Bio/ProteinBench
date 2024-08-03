@@ -1,4 +1,4 @@
-import sys; sys.path.append('/huyuqi/xmyu/DiffSDS')
+# import sys; sys.path.append('/huyuqi/xmyu/DiffSDS')
 import inspect
 import torch
 from src.tools.utils import cuda
@@ -203,8 +203,8 @@ class MInterface(MInterface_base):
 
         if self.hparams.model_name == 'KWDesign':
             from src.models.kwdesign_model import KWDesign_model
-            from src.models.MemoryPiFold import MemoPiFold_model
-            from src.models.MemoryESMIF import MemoESMIF
+            # from src.models.MemoryPiFold import MemoPiFold_model
+            # from src.models.MemoryESMIF import MemoESMIF
             # memopifold = MemoPiFold_model(params)
             # memoesmif = MemoESMIF(params)
             # self.model = KWDesign_model(params, memopifold, memoesmif)

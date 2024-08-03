@@ -26,6 +26,7 @@ def reload_model(model_path, model_name):
     config['model_name'] = model_name
     config['res_dir'] = '/gaozhangyang/experiments/OpenCPD/results'
     config['data_root'] = '/gaozhangyang/experiments/ProteinInvBench/data/cath4.3'
+    config['is_colab'] = False
     model = MInterface(**config)
     model.eval()
     return model

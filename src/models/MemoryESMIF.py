@@ -9,9 +9,9 @@ from .PretrainESMIF_model import PretrainESMIF_Model
 from torch_scatter import scatter_sum
 
 class MemoESMIF(nn.Module):
-    def __init__(self, ):
+    def __init__(self, args):
         super().__init__()
-        self.PretrainESMIF = PretrainESMIF_Model()
+        self.PretrainESMIF = PretrainESMIF_Model(args)
         self.memory = {}
         # self.fix_memory = False
     

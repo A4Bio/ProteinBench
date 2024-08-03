@@ -158,11 +158,11 @@ class KWDesign_model(nn.Module):
         tunning_layers_dim = args.tunning_layers_dim
         
         self.memo_pifold = MemoPiFold_model(args)
-        self.memo_esmif = MemoESMIF()
-        # if args.load_memory:
-        #     memory = torch.load(args.memory_path)
-        #     self.memo_pifold = memory['memo_pifold']
-        #     self.memo_esmif = memory['memo_esmif']
+        self.memo_esmif = MemoESMIF(args)
+        if args.load_memory:
+            memory = torch.load(args.memory_path)
+            self.memo_pifold = memory['memo_pifold']
+            self.memo_esmif = memory['memo_esmif']
 
         for i in range(1, self.args.recycle_n+1):
             if i==1:
