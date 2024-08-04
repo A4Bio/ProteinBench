@@ -163,7 +163,7 @@ class MInterface(MInterface_base):
         if self.hparams.is_colab == 'False':
             params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
         else: 
-            pass
+            params = self.hparams
         params.update(self.hparams)
         # if self.model is None:
         #     params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
