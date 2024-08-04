@@ -56,7 +56,12 @@ class MInterface(MInterface_base):
                         submodule.fix_memory = True
                         for p in submodule.parameters():
                             p.requires_grad = False
-
+        elif self.hparams['pretrained_path']:
+            ckpt = torch.load(self.hparams['pretrained_path'])
+            ckpt = {k.replace('_forward_module.model.',''):v for k,v in ckpt.items()}
+            # if 'virtual_atoms' in ckpt:
+            #     ckpt['virtual_atoms'] = ckpt['virtual_atoms'].view(0,3)
+            self.model.load_state_dict(ckpt, strict=False)
         self.cross_entropy = nn.NLLLoss(reduction='none')
         os.makedirs(os.path.join(self.hparams.res_dir, self.hparams.ex_name), exist_ok=True)
 
@@ -160,11 +165,12 @@ class MInterface(MInterface_base):
         self.loss_function = loss_function
         
     def load_model(self):
-        if self.hparams.is_colab == 'False':
+        if self.hparams.is_colab == False:
             params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
+            params.update(self.hparams)
         else: 
-            params = self.hparams
-        params.update(self.hparams)
+            params = OmegaConf.create()
+            params.merge(self.hparams)
         # if self.model is None:
         #     params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
         #     params.update(self.hparams)
