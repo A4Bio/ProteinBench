@@ -16,11 +16,11 @@ from transformers import AutoTokenizer
 
 # 加载模型
 def reload_model(model_path, model_name):
-    default_params = json.load(open(f'/gaozhangyang/experiments/OpenCPD/results/CATH4.3/KWDesign/model_param.json'))
+    # default_params = json.load(open(f'/gaozhangyang/experiments/OpenCPD/results/CATH4.3/KWDesign/model_param.json'))
     # default_params = json.load(open(f'/gaozhangyang/experiments/OpenCPD/results/MPNN/{ex_name}/model_param.json'))
     # default_params = json.load(open(f'./results/PiFold/{ex_name}/model_param.json'))
     config = {}
-    config.update(default_params)
+    # config.update(default_params)
     config['load_memory'] = False
     # config['ex_name'] = model_name
     config['model_name'] = model_name
@@ -41,7 +41,7 @@ def inference(model, protein, model_name):
         
     with torch.no_grad():   
         if model_name == 'KWDesign':
-            # 调用 _get_features 方法
+            
             features = model.model.Design1.design_model.PretrainPiFold._get_features(protein)
             X, S, score, h_V, h_E, E_idx, batch_id, chain_mask, chain_encoding = features['X'], features['S'], features['score'], features['_V'], features['_E'], features['E_idx'], features['batch_id'], features['chain_mask'], features['chain_encoding']
 
