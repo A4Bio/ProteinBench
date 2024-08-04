@@ -160,7 +160,10 @@ class MInterface(MInterface_base):
         self.loss_function = loss_function
         
     def load_model(self):
-        params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
+        if self.hparams.is_colab == 'False':
+            params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
+        else: 
+            pass
         params.update(self.hparams)
         # if self.model is None:
         #     params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
