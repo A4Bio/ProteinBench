@@ -78,8 +78,9 @@ class Design_Model(nn.Module):
             probs.append(torch.softmax(pretrain_gnn_msa['probs']/self.temporature, dim=-1))
             # pred_ids.append( msa_pred_ids[:,m,:])
             pred_ids.append(torch.multinomial(probs[-1].reshape(-1,33), 1).reshape(B,N))
-            
-            confs.append(probs[-1].reshape(-1,33)[torch.arange(pred_ids[-1].reshape(-1).shape[0]).cuda(),pred_ids[-1].reshape(-1)].reshape(B,N))
+        
+            confs.append(probs[-1].reshape(-1,33)[torch.arange(pred_ids[-1].reshape(-1).shape[0]),pred_ids[-1].reshape(-1)].reshape(B,N))
+            # confs.append(probs[-1].reshape(-1,33)[torch.arange(pred_ids[-1].reshape(-1).shape[0]).cuda,pred_ids[-1].reshape(-1)].reshape(B,N))
             attention_mask.append(pretrain_gnn_msa['attention_mask'])
         
         pretrain_esm_msa = {}
