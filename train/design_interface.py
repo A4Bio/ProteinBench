@@ -169,8 +169,8 @@ class MInterface(MInterface_base):
             params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
             params.update(self.hparams)
         else: 
-            params = OmegaConf.create()
-            params.merge(self.hparams)
+            params = OmegaConf.load(f'/content/main/src/models/configs/{self.hparams.model_name}.yaml')
+            params.update(self.hparams)
         # if self.model is None:
         #     params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
         #     params.update(self.hparams)
