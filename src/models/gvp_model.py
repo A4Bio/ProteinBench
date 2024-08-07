@@ -4,8 +4,8 @@ from torch.distributions import Categorical
 from torch_scatter import scatter_mean
 
 from src.modules.gvp_module import GVP, GVPConvLayer, LayerNorm, tuple_index
-
-
+from src.tools import gather_nodes, _dihedrals, _get_rbf, _get_dist, _rbf, _orientations_coarse_gl_tuple
+import numpy as np
 class GVP_Model(nn.Module):
     '''
     GVP-GNN for structure-conditioned autoregressive 
@@ -104,7 +104,49 @@ class GVP_Model(nn.Module):
         logits = self.W_out(h_V)
         log_probs = nn.functional.log_softmax(logits, dim=-1)
         return {'log_probs': log_probs, 'logits': logits}
-    
+
+    # def forward(self, batch):
+    #     '''
+    #     Forward pass to be used at train-time, or evaluating likelihood.
+        
+    #     :param batch: a dictionary containing the following keys:
+    #         - h_V: tuple (s, V) of node embeddings
+    #         - h_E: tuple (s, V) of edge embeddings
+    #         - edge_index: `torch.Tensor` of shape [2, num_edges]
+    #         - seq: int `torch.Tensor` of shape [num_nodes]
+    #     '''
+
+    #     h_V = batch['h_V']
+    #     h_E = batch['h_E']
+    #     edge_index = batch['E_idx']
+    #     seq = batch['S']
+        
+
+    #     h_V = self.W_v(h_V)
+    #     h_E = self.W_e(h_E)
+        
+
+    #     for layer in self.encoder_layers:
+    #         h_V = layer(h_V, edge_index, h_E)
+        
+    #     encoder_embeddings = h_V
+        
+
+    #     h_S = self.W_s(seq)
+    #     h_S = h_S[edge_index[0]]
+    #     h_S[edge_index[0] >= edge_index[1]] = 0
+    #     h_E = (torch.cat([h_E[0], h_S], dim=-1), h_E[1])
+        
+
+    #     for layer in self.decoder_layers:
+    #         h_V = layer(h_V, edge_index, h_E, autoregressive_x = encoder_embeddings)
+        
+
+    #     logits = self.W_out(h_V)
+    #     log_probs = nn.functional.log_softmax(logits, dim=-1)
+        
+    #     return {'log_probs': log_probs, 'logits': logits}
+
     def sample(self, h_V, edge_index, h_E, n_samples, temperature=0.1):
         '''
         Samples sequences auto-regressively from the distribution
@@ -181,3 +223,5 @@ class GVP_Model(nn.Module):
         h_E = (protein.edge_s, protein.edge_v) 
         sample = self.sample(h_V, protein.edge_index, h_E, n_samples=1)
         return sample.squeeze(0)
+    
+ 
