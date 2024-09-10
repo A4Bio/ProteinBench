@@ -9,8 +9,9 @@ from .pifold_model import PiFold_Model
 from .proteinmpnn_model import ProteinMPNN_Model
 from .structgnn_model import StructGNN_Model
 from .kwdesign_model import KWDesign_model
+from .uniif_model import UniIF_Model
 
 __all__ = [
     'AlphaDesign_Model', 'ESMIF_Model', 'GCA_Model', 'GraphTrans_Model', 'GVP_Model',
-    'PiFold_Model', 'ProteinMPNN_Model', 'StructGNN_Model', 'KWDesign_model'
+    'PiFold_Model', 'ProteinMPNN_Model', 'StructGNN_Model', 'KWDesign_model', 'UniIF_Model'
 ]

@@ -2,6 +2,7 @@
 
 from .alphafold_dataset import AlphaFoldDataset
 from .cath_dataset import CATHDataset
+from .protein_rna_dataset import Protein_RNA_Dataset
 from .dataloader import load_data
 from .featurizer import (featurize_AF, featurize_GTrans, featurize_GVP,
                          featurize_ProteinMPNN, featurize_Inversefolding)
@@ -11,5 +12,6 @@ __all__ = [
     'AlphaFoldDataset', 'CATHDataset', 'TSDataset',
     'load_data',
     'featurize_AF', 'featurize_GTrans', 'featurize_GVP',
-    'featurize_ProteinMPNN', 'featurize_Inversefolding','parsePDB'
+    'featurize_ProteinMPNN', 'featurize_Inversefolding','parsePDB',
+    'Protein_RNA_Dataset'
 ]

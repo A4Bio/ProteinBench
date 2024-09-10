@@ -50,8 +50,7 @@ class DInterface(DInterface_base):
         self.load_data_module()
 
     def setup(self, stage=None):
-        from src.datasets.featurizer import (featurize_AF, featurize_GTrans, featurize_GVP,
-                         featurize_ProteinMPNN, featurize_Inversefolding)
+        from src.datasets.featurizer import (featurize_AF, featurize_GTrans, featurize_GVP, featurize_ProteinMPNN, featurize_Inversefolding, featurize_UniIF)
         if self.hparams.model_name in ['AlphaDesign', 'PiFold', 'KWDesign', 'GraphTrans', 'StructGNN', 'GCA', 'E3PiFold']:
             self.collate_fn = featurize_GTrans
         elif self.hparams.model_name == 'GVP':
@@ -61,11 +60,13 @@ class DInterface(DInterface_base):
             self.collate_fn = featurize_ProteinMPNN
         elif self.hparams.model_name == 'ESMIF':
             self.collate_fn = featurize_Inversefolding
+        elif self.hparams.model_name == 'UniIF':
+            self.collate_fn = featurize_UniIF().featurize
     
         # Assign train/val datasets for use in dataloaders
         if stage == 'fit' or stage is None:
-            self.trainset = self.instancialize(split = 'train')
-            self.valset = self.instancialize(split='valid')
+           self.trainset = self.instancialize(split = 'train')
+           self.valset = self.instancialize(split='valid')
 
         # Assign test dataset for use in dataloader(s)
         if stage == 'test' or stage is None:

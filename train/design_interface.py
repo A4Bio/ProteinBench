@@ -226,8 +226,11 @@ class MInterface(MInterface_base):
             memopifold = MemoBlockGAT_model(params, self.hparams.pretrained_blockgat_path)
             memoesmif = MemoESMIF(pretrained_esm_path = "/gaozhangyang/model_zoom/transformers/esm_if/esm_if1_gvp4_t16_142M_UR50.pt")
             self.model = KWDesign_model(params, memopifold, memoesmif)
-        
-
+        # self.model.to(params.device)
+        if self.hparams.model_name == 'UniIF':
+            from src.models.uniif_model import UniIF_Model
+            self.model = UniIF_Model(params)
+            
     def instancialize(self, Model, **other_args):
         """ Instancialize a model using the corresponding parameters
             from self.hparams dictionary. You can also input any args
