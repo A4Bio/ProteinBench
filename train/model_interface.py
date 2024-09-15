@@ -139,6 +139,10 @@ class MInterface(MInterface_base):
         if self.hparams.model_name == 'E3PiFold':
             from src.models.E3PiFold_model import E3PiFold
             self.model = E3PiFold(params)
+        
+        if self.hparams.model_name == 'UniIF':
+            from src.models.uniif_model import UniIF_Model
+            self.model = UniIF_Model(params)
 
     def instancialize(self, Model, **other_args):
         """ Instancialize a model using the corresponding parameters

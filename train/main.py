@@ -27,7 +27,7 @@ def create_parser():
     
     
     parser.add_argument('--dataset', default='CATH4.3') # AF2DB_dataset, CATH_dataset
-    parser.add_argument('--model_name', default='PiFold', choices=['StructGNN', 'GraphTrans', 'GVP', 'GCA', 'AlphaDesign', 'ESMIF', 'PiFold', 'ProteinMPNN', 'KWDesign', 'E3PiFold'])
+    parser.add_argument('--model_name', default='UniIF', choices=['StructGNN', 'GraphTrans', 'GVP', 'GCA', 'AlphaDesign', 'ESMIF', 'PiFold', 'ProteinMPNN', 'KWDesign', 'E3PiFold', 'UniIF'])
     parser.add_argument('--lr', default=1e-3, type=float, help='Learning rate')
     parser.add_argument('--lr_scheduler', default='onecycle')
     parser.add_argument('--offline', default=1, type=int)
@@ -107,10 +107,13 @@ if __name__ == "__main__":
     data_module.setup()
     
     gpu_count = torch.cuda.device_count()
-    args.steps_per_epoch = math.ceil(len(data_module.trainset)/args.batch_size/gpu_count)
-    print(f"steps_per_epoch {args.steps_per_epoch},  gpu_count {gpu_count}, batch_size{args.batch_size}")
+    # args.steps_per_epoch = math.ceil(len(data_module.trainset)/args.batch_size/gpu_count)
+    # print(f"steps_per_epoch {args.steps_per_epoch},  gpu_count {gpu_count}, batch_size{args.batch_size}")
 
     model = MInterface(**vars(args))
+    ckpt = torch.load('/gaozhangyang/experiments/ProteinInvBench/model_zoom/PDB/UniIF/checkpoint.pth')
+    ckpt = {k.replace('_forward_module.model.',''):v for k,v in ckpt.items()}
+    model.model.load_state_dict(ckpt)
 
     
     trainer_config = {
@@ -118,7 +121,7 @@ if __name__ == "__main__":
         'max_epochs': args.epoch,  # Maximum number of epochs to train for
         'num_nodes': 1,  # Number of nodes to use for distributed training
         "strategy": 'deepspeed_stage_2', # 'ddp', 'deepspeed_stage_2
-        "precision": 'bf16', # "bf16", 16
+        "precision": '32', # "bf16", 16
         'accelerator': 'gpu',  # Use distributed data parallel
         'callbacks': load_callbacks(args),
         'logger': plog.WandbLogger(
@@ -134,7 +137,7 @@ if __name__ == "__main__":
     trainer_opt = argparse.Namespace(**trainer_config)
     trainer = Trainer.from_argparse_args(trainer_opt)
     
-    trainer.fit(model, data_module)
+    # trainer.fit(model, data_module)
     
     print(trainer_config)
-    trainer.test(datamodule=data_module)
+    trainer.test(datamodule=data_module, model=model)
