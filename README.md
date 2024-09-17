@@ -51,7 +51,7 @@ This repository is an open-source project for benchmarking structure-based prote
 ```bash
 pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.4.0+cu121.html
 pip install -r requirements.txt
-python setup.py install
+python setup.py install or pip install ProteinInvBench==0.1.0
 ```
 
 ## Overview
