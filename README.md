@@ -47,6 +47,13 @@ This repository is an open-source project for benchmarking structure-based prote
     <img width="75%" src=https://github.com/A4Bio/OpenCPD/blob/release/assets/CATH.png> <br>
 </p> -->
 
+## Install via pip
+```bash
+pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.4.0+cu121.html
+pip install -r requirements.txt
+python setup.py install
+```
+
 ## Overview
 
 <details open>
