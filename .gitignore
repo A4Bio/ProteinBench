@@ -144,3 +144,4 @@ StructAE/pdbs/*
 # sae_model
 src/modules/pifold_module_sae.py
 src/models/PiFold_sae.py
+evaluation_tools/UniIF/*

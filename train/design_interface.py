@@ -169,7 +169,7 @@ class MInterface(MInterface_base):
             params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')
             params.update(self.hparams)
         else: 
-            params = OmegaConf.load(f'/content/main/src/models/configs/{self.hparams.model_name}.yaml')
+            params = OmegaConf.load(f'evaluation_tools/{self.hparams.model_name}/{self.hparams.model_name}.yaml')
             params.update(self.hparams)
         # if self.model is None:
         #     params = OmegaConf.load(f'./src/models/configs/{self.hparams.model_name}.yaml')

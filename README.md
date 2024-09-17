@@ -1,6 +1,4 @@
-```
-
-```
+One can use the [Colab](https://colab.research.google.com/drive/14eUknlvCiLKqtkAsNDGv8G-mIExc2CAT#scrollTo=YaNMxS_1Js_0) to evaluate our latest model UniIF.
 
 # ProteinInvBench: Benchmarking Protein Design on Diverse Tasks, Models, and Metrics
 Model zoom: https://zenodo.org/record/8031783
@@ -204,6 +202,18 @@ For adding new features, looking for helps, or reporting bugs associated with `P
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## TODO
-1. Switch code to torch_lightning framework
+1. Switch code to torch_lightning framework (Done)
 2. Deploy code to public server
 3. Support pip installation
+
+
+## InverseFolding as Evaluation Tools
+```bash
+evaluation_tools/InverseFolding.py --pdb_path test_pdbs --sv_fasta_path test.fasta --model UniIF --topk 5
+```
+For each pdb fild in **test_pdbs**, we use **UniIF** to design the corresponding **top-k** sequence and save the results in **test.fasta**
+
+<!-- 
+```bash
+evaluation_tools/Folding.py --fasta_path test.fasta --sv_pdb_path test_pdbs
+``` -->
