@@ -1,6 +1,6 @@
 import inspect
 from torch.utils.data import DataLoader
-from PIB.src.interface.data_interface import DInterface_base
+from PInvBench.src.interface.data_interface import DInterface_base
 import torch
 import os.path as osp
 
@@ -42,7 +42,7 @@ class DInterface(DInterface_base):
         self.load_data_module()
 
     def setup(self, stage=None):
-        from PIB.src.datasets.featurizer import (featurize_GTrans, featurize_GVP, featurize_ProteinMPNN, featurize_Inversefolding, featurize_UniIF)
+        from PInvBench.src.datasets.featurizer import (featurize_GTrans, featurize_GVP, featurize_ProteinMPNN, featurize_Inversefolding, featurize_UniIF)
         if self.hparams.model_name in ['AlphaDesign', 'PiFold', 'KWDesign', 'GraphTrans', 'StructGNN', 'GCA', 'E3PiFold']:
             self.collate_fn = featurize_GTrans
         elif self.hparams.model_name == 'GVP':
@@ -77,29 +77,29 @@ class DInterface(DInterface_base):
         name = self.hparams.dataset
         
         if name == 'TS':
-            from PIB.src.datasets.ts_dataset  import TSDataset
+            from PInvBench.src.datasets.ts_dataset  import TSDataset
             self.data_module = TSDataset
             self.hparams['path'] = osp.join(self.hparams.data_root, 'ts')
         
         if name == 'CASP15':
-            from PIB.src.datasets.casp_dataset  import CASPDataset
+            from PInvBench.src.datasets.casp_dataset  import CASPDataset
             self.data_module = CASPDataset
             self.hparams['path'] = osp.join(self.hparams.data_root, 'casp15')
         
         if name == 'CATH4.2':
-            from PIB.src.datasets.cath_dataset import CATHDataset
+            from PInvBench.src.datasets.cath_dataset import CATHDataset
             self.data_module = CATHDataset
             self.hparams['version'] = 4.2
             self.hparams['path'] = osp.join(self.hparams.data_root, 'cath4.2')
             
         if name == 'CATH4.3':
-            from PIB.src.datasets.cath_dataset import CATHDataset
+            from PInvBench.src.datasets.cath_dataset import CATHDataset
             self.data_module = CATHDataset
             self.hparams['version'] = 4.3
             self.hparams['path'] = osp.join(self.hparams.data_root, 'cath4.3')
         
         if name == 'MPNN':
-            from PIB.src.datasets.mpnn_dataset import MPNNDataset
+            from PInvBench.src.datasets.mpnn_dataset import MPNNDataset
             self.data_module = MPNNDataset
 
     def instancialize(self, **other_args):

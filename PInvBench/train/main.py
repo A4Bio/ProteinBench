@@ -14,7 +14,7 @@ import pytorch_lightning.callbacks as plc
 import pytorch_lightning.loggers as plog
 from model_interface import MInterface
 from data_interface import DInterface
-from PIB.src.tools.logger import SetupCallback,BackupCodeCallback
+from PInvBench.src.tools.logger import SetupCallback,BackupCodeCallback
 from shutil import ignore_patterns
 import math
 

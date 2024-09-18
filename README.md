@@ -45,7 +45,7 @@ This repository is an open-source project for benchmarking structure-based prote
 ```bash
 pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.4.0+cu121.html
 pip install -r requirements.txt
-python setup.py install or pip install PIB==0.1.0
+pip install PInvBench==0.1.0
 ```
 
 ## Overview
@@ -211,7 +211,7 @@ For adding new features, looking for helps, or reporting bugs associated with `P
 ## InverseFolding as Evaluation Tools
 ```bash
 export PYTHONPATH=path/ProteinInvBench
-python PIB/evaluation_tools/InverseFolding.py --pdb_path test_pdbs --sv_fasta_path test.fasta --model UniIF --topk 5 --temp 1.0
+python PInvBench/evaluation_tools/InverseFolding.py --pdb_path test_pdbs --sv_fasta_path test.fasta --model UniIF --topk 5 --temp 1.0
 ```
 For each pdb file in **test_pdbs**, we use **UniIF** to design the corresponding **top-k** sequence and save the results in **test.fasta**. The sampling tempertature is 1.0.
 

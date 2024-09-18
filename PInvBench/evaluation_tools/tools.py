@@ -2,7 +2,7 @@ import os
 import os.path as osp
 import torch
 import numpy as np
-from PIB.evaluation_tools.design_interface import MInterface
+from PInvBench.evaluation_tools.design_interface import MInterface
 import json
 from transformers import AutoTokenizer
 from sklearn.metrics import f1_score
@@ -95,11 +95,14 @@ def reload_model(data_name,model_name):
       config.update(default_params)
     else:
       config = {}
+    
+    path = os.path.dirname(os.path.abspath(__file__))
+    # path = os.path.dirname(current_dir)
     config['load_memory'] = False
     config['is_colab'] = True
     config['ex_name'] = f'{model_name}'
     config['model_name'] = model_name
-    config['res_dir'] = 'PIB/evaluation_tools'
+    config['res_dir'] = path
     config['data_root'] = '/data/cath4.3'
     config['pretrained_path'] = osp.join(config['res_dir'],  config['ex_name'],'checkpoint.pth')
     config['config_path'] = osp.join(config['res_dir'],  config['ex_name'],f'{model_name}.yaml')
@@ -108,7 +111,7 @@ def reload_model(data_name,model_name):
     return model
 
 def inference(model, protein_input, model_name, topk=5, temp=1.0):
-    from PIB.src.datasets.featurizer import MyTokenizer, featurize_GTrans, featurize_GVP, featurize_ProteinMPNN,featurize_UniIF
+    from PInvBench.src.datasets.featurizer import MyTokenizer, featurize_GTrans, featurize_GVP, featurize_ProteinMPNN,featurize_UniIF
 
 
     with torch.no_grad():
@@ -218,8 +221,9 @@ def download_and_unzip_model(model_name):
         'PiFold': 'https://zenodo.org/records/13630171/files/PiFold.zip?download=1',
         'UniIF':'https://zenodo.org/records/13738616/files/UniIF.zip?download=1'
     }
-
-    model_dir = f'PIB/evaluation_tools/{model_name}'
+    path = os.path.dirname(os.path.abspath(__file__))
+    # path = os.path.dirname(current_dir)
+    model_dir = f'{path}/{model_name}'
     zip_path = f'{model_dir}/{model_name}.zip'
 
     os.makedirs(model_dir, exist_ok=True)

@@ -3,7 +3,7 @@ import torch
 from torch.utils.data import DataLoader
 import numpy as np
 from Bio import PDB
-from PIB.src.interface.model_interface import MInterface_base
+from PInvBench.src.interface.model_interface import MInterface_base
 from omegaconf import OmegaConf
 
 class InferenceInterface(MInterface_base):

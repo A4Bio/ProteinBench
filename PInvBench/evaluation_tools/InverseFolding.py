@@ -21,8 +21,8 @@ def create_parser():
     parser = argparse.ArgumentParser()
     # Set-up parameters
     parser.add_argument('--model_name', default='UniIF', type=str)
-    parser.add_argument('--pdb_path', default='PIB/evaluation_tools/test', type=str)
-    parser.add_argument('--sv_fasta_path', default='PIB/evaluation_tools/test.fasta', type=str)
+    parser.add_argument('--pdb_path', default='/gaozhangyang/experiments/ProteinInvBench/PInvBench/evaluation_tools/test', type=str)
+    parser.add_argument('--sv_fasta_path', default='/gaozhangyang/experiments/ProteinInvBench/PInvBench/evaluation_tools/test.fasta', type=str)
     parser.add_argument('--topk', default=1, type=int)
     parser.add_argument('--temp', default=1.0, type=float)
     args = parser.parse_args()

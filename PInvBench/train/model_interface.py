@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import os
 from torcheval.metrics.text import Perplexity
-from PIB.src.interface.model_interface import MInterface_base
+from PInvBench.src.interface.model_interface import MInterface_base
 import math
 from omegaconf import OmegaConf
 
@@ -99,34 +99,34 @@ class MInterface(MInterface_base):
         params.update(self.hparams)
 
         if self.hparams.model_name == 'GraphTrans':
-            from PIB.src.models.graphtrans_model import GraphTrans_Model
+            from PInvBench.src.models.graphtrans_model import GraphTrans_Model
             self.model = GraphTrans_Model(params)
         
         if self.hparams.model_name == 'StructGNN':
-            from PIB.src.models.structgnn_model import StructGNN_Model
+            from PInvBench.src.models.structgnn_model import StructGNN_Model
             self.model = StructGNN_Model(params)
             
         if self.hparams.model_name == 'GVP':
-            from PIB.src.models.gvp_model import GVP_Model
+            from PInvBench.src.models.gvp_model import GVP_Model
             self.model = GVP_Model(params)
 
         if self.hparams.model_name == 'GCA':
-            from PIB.src.models.gca_model import GCA_Model
+            from PInvBench.src.models.gca_model import GCA_Model
             self.model = GCA_Model(params)
 
         if self.hparams.model_name == 'AlphaDesign':
-            from PIB.src.models.alphadesign_model import AlphaDesign_Model
+            from PInvBench.src.models.alphadesign_model import AlphaDesign_Model
             self.model = AlphaDesign_Model(params)
 
         if self.hparams.model_name == 'ProteinMPNN':
-            from PIB.src.models.proteinmpnn_model import ProteinMPNN_Model
+            from PInvBench.src.models.proteinmpnn_model import ProteinMPNN_Model
             self.model = ProteinMPNN_Model(params)
 
         if self.hparams.model_name == 'ESMIF':
             pass
 
         if self.hparams.model_name == 'PiFold':
-            from PIB.src.models.pifold_model import PiFold_Model
+            from PInvBench.src.models.pifold_model import PiFold_Model
             self.model = PiFold_Model(params)
 
         # if self.hparams.model_name == 'KWDesign':
@@ -134,11 +134,11 @@ class MInterface(MInterface_base):
         #     self.model = Design_Model(params)
         
         if self.hparams.model_name == 'E3PiFold':
-            from PIB.src.models.E3PiFold_model import E3PiFold
+            from PInvBench.src.models.E3PiFold_model import E3PiFold
             self.model = E3PiFold(params)
         
         if self.hparams.model_name == 'UniIF':
-            from PIB.src.models.uniif_model import UniIF_Model
+            from PInvBench.src.models.uniif_model import UniIF_Model
             self.model = UniIF_Model(params)
 
     def instancialize(self, Model, **other_args):

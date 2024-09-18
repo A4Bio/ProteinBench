@@ -1,4 +1,4 @@
-from PIB.evaluation_tools.tools import fold_sequences_with_esmfold, install_esmfold
+from PInvBench.evaluation_tools.tools import fold_sequences_with_esmfold, install_esmfold
 import argparse
 
 def create_parser():
