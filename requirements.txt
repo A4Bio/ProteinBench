@@ -16,5 +16,6 @@ pandas
 matplotlib
 fair-esm
 biotite==0.37.0
+deepspeed
 
 -f https://data.pyg.org/whl/torch-2.4.0+cu121.html

@@ -1,0 +1,11 @@
+augment_eps: 0.0
+num_encoder_layers: 3
+hidden_dim: 128
+hidden: 128
+k_neighbors: 30
+vocab_size: 33
+features: full
+num_decoder_layers: 3
+dropout: 0.1
+is_attention: 1
+smoothing: 0.1

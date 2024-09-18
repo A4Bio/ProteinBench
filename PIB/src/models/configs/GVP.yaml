@@ -1,0 +1,4 @@
+augment_eps: 0.0
+num_encoder_layers: 10
+hidden_dim: 128
+max_nodes: 2000

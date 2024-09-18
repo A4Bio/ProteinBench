@@ -1,0 +1,11 @@
+augment_eps: 0.0
+num_encoder_layers: 3
+hidden_dim: 128
+hidden: 128
+k_neighbors: 30
+num_letters: 33
+num_decoder_layers: 3
+vocab: 33
+dropout: 0.1
+smoothing: 0.1
+proteinmpnn_type: 0

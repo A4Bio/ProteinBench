@@ -1,0 +1,14 @@
+augment_eps: 0.0
+num_encoder_layers: 10
+hidden_dim: 128
+node_features: 128
+edge_features: 128
+k_neighbors: 30
+dropout: 0.1
+att_output_mlp: true
+node_output_mlp: true
+use_SGT: true
+use_new_feat: true
+use_NAT: true
+AT_layer_num: 3
+autoregressive: 0
