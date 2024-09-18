@@ -217,9 +217,9 @@ For adding new features, looking for helps, or reporting bugs associated with `P
 ## InverseFolding as Evaluation Tools
 ```bash
 export PYTHONPATH=path/ProteinInvBench
-PIB/evaluation_tools/InverseFolding.py --pdb_path test_pdbs --sv_fasta_path test.fasta --model UniIF --topk 5
+PIB/evaluation_tools/InverseFolding.py --pdb_path test_pdbs --sv_fasta_path test.fasta --model UniIF --topk 5 --temp 1.0
 ```
-For each pdb fild in **test_pdbs**, we use **UniIF** to design the corresponding **top-k** sequence and save the results in **test.fasta**
+For each pdb file in **test_pdbs**, we use **UniIF** to design the corresponding **top-k** sequence and save the results in **test.fasta**. The sampling tempertature is 1.0.
 
 <!-- 
 ```bash

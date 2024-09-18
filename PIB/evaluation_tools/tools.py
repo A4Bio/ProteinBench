@@ -107,7 +107,7 @@ def reload_model(data_name,model_name):
     model.eval()
     return model
 
-def inference(model, protein_input, model_name, topk=5):
+def inference(model, protein_input, model_name, topk=5, temp=1.0):
     from PIB.src.datasets.featurizer import MyTokenizer, featurize_GTrans, featurize_GVP, featurize_ProteinMPNN,featurize_UniIF
 
 
@@ -162,13 +162,14 @@ def inference(model, protein_input, model_name, topk=5):
             batch = model.model._get_features(protein)
 
         results = model.model(batch)
-        log_probs = results['log_probs']
+        logits = results['logits']
 
+    probs = torch.softmax(logits/temp, dim=-1)
     if model_name == 'UniIF':
         tokenizer = MyTokenizer()
     else:
         tokenizer = AutoTokenizer.from_pretrained("facebook/esm2_t33_650M_UR50D")
-    probs = log_probs.exp()
+    # probs = log_probs.exp()
 
 
     if model_name in ['GCA', 'StructGNN', 'GraphTrans','ProteinMPNN']:
