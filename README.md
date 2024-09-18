@@ -1,14 +1,10 @@
-One can use the [Colab](https://colab.research.google.com/drive/14eUknlvCiLKqtkAsNDGv8G-mIExc2CAT#scrollTo=YaNMxS_1Js_0) to evaluate our latest model UniIF.
+One can use the [Colab](https://colab.research.google.com/drive/14eUknlvCiLKqtkAsNDGv8G-mIExc2CAT#scrollTo=YaNMxS_1Js_0) to evaluate our latest models.
 
 # ProteinInvBench: Benchmarking Protein Design on Diverse Tasks, Models, and Metrics
 Model zoom: https://zenodo.org/record/8031783
 <p align="left">
-<!-- <a href="https://arxiv.org/abs/2211.12509" alt="arXiv">
-    <img src="https://img.shields.io/badge/arXiv-2211.12509-b31b1b.svg?style=flat" /></a> -->
 <a href="https://github.com/A4Bio/OpenCPD/blob/release/LICENSE" alt="license">
     <img src="https://img.shields.io/badge/license-Apache--2.0-%23002FA7" /></a>
-<!-- <a href="https://openstl.readthedocs.io/en/latest/" alt="docs">
-    <img src="https://readthedocs.org/projects/openstl/badge/?version=latest" /></a> -->
 <a href="https://github.com/A4Bio/OpenCPD/issues" alt="docs">
     <img src="https://img.shields.io/github/issues-raw/A4Bio/OpenCPD?color=%23FF9600" /></a>
 <a href="https://github.com/A4Bio/OpenCPD/issues" alt="resolution">
@@ -43,9 +39,7 @@ This repository is an open-source project for benchmarking structure-based prote
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-<!-- <p align="center">
-    <img width="75%" src=https://github.com/A4Bio/OpenCPD/blob/release/assets/CATH.png> <br>
-</p> -->
+
 
 ## Install via pip
 ```bash
@@ -217,7 +211,7 @@ For adding new features, looking for helps, or reporting bugs associated with `P
 ## InverseFolding as Evaluation Tools
 ```bash
 export PYTHONPATH=path/ProteinInvBench
-PIB/evaluation_tools/InverseFolding.py --pdb_path test_pdbs --sv_fasta_path test.fasta --model UniIF --topk 5 --temp 1.0
+python PIB/evaluation_tools/InverseFolding.py --pdb_path test_pdbs --sv_fasta_path test.fasta --model UniIF --topk 5 --temp 1.0
 ```
 For each pdb file in **test_pdbs**, we use **UniIF** to design the corresponding **top-k** sequence and save the results in **test.fasta**. The sampling tempertature is 1.0.
 
