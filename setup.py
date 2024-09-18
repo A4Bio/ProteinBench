@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='ProteinInvBench',              # 包名
+    name='PIB',              # 包名
     version='0.1.0',                       # 包的版本号
     author='Zhangyang Gao',                    # 作者姓名
     author_email='gaozhangyang@westlake.edu.cn', # 作者邮箱

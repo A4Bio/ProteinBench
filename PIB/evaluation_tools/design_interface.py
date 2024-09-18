@@ -151,7 +151,7 @@ class MInterface(MInterface_base):
         
     def load_model(self):
 
-        params = OmegaConf.load(f'PIB/src/models/configs/{self.hparams.model_name}.yaml')
+        params = OmegaConf.load(self.hparams.config_path)
         params.update(self.hparams)
 
             

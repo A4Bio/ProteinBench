@@ -1,6 +1,21 @@
-from tools import inference, reload_model, parsePDB, calculate_metrics, download_and_unzip_model, save_fasta
+from .tools import inference, reload_model, parsePDB, calculate_metrics, download_and_unzip_model, save_fasta
 import argparse
 import os
+
+def pdb2fasta(pdb_path, sv_fasta_path, topk, model_name='UniIF'):
+    download_and_unzip_model(model_name)
+    model = reload_model('UniIF', model_name)
+    all_pred_seqs = []
+    all_names = []
+    for pdb_file in os.listdir(pdb_path):
+        protein = parsePDB(pdb_path+'/'+pdb_file)
+        
+        pred_seqs, scores, true_seq = inference(model, protein, model_name, topk=topk)
+        names = [pdb_file.split('.')[0]+f'pred_{i}' for i in range(len(pred_seqs))]
+        all_pred_seqs.extend(pred_seqs)
+        all_names.extend(names)
+    
+    save_fasta(all_pred_seqs, all_names, sv_fasta_path)
 
 def create_parser():
     parser = argparse.ArgumentParser()

@@ -21,7 +21,7 @@ import math
 def create_parser():
     parser = argparse.ArgumentParser()
     # Set-up parameters
-    parser.add_argument('--res_dir', default='.PIB//train/results', type=str)
+    parser.add_argument('--res_dir', default='PIB/train/results', type=str)
     parser.add_argument('--ex_name', default='debug', type=str)
     parser.add_argument('--check_val_every_n_epoch', default=1, type=int)
     

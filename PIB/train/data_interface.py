@@ -31,13 +31,6 @@ class MyDataLoader(DataLoader):
                         if type(val) == torch.Tensor:
                             batch[key] = batch[key].cuda(non_blocking=True, device=self.pretrain_device)
 
-                    # X = batch['X'].cuda(non_blocking=True, device=self.pretrain_device)
-                    # S = batch['S'].cuda(non_blocking=True, device=self.pretrain_device)
-                    # score = batch['score'].cuda(non_blocking=True, device=self.pretrain_device)
-                    # mask = batch['mask'].cuda(non_blocking=True, device=self.pretrain_device)
-                    # lengths = batch['lengths'].cuda(non_blocking=True, device=self.pretrain_device)
-                    # chain_mask = batch['chain_mask'].cuda(non_blocking=True, device=self.pretrain_device)
-                    # chain_encoding = batch['chain_encoding'].cuda(non_blocking=True, device=self.pretrain_device)
                 
                     yield batch
 
@@ -82,9 +75,6 @@ class DInterface(DInterface_base):
 
     def load_data_module(self):
         name = self.hparams.dataset
-        if name == 'AF2DB':
-            from PIB.src.datasets.AF2DB_dataset_lmdb import Af2dbDataset
-            self.data_module = Af2dbDataset
         
         if name == 'TS':
             from PIB.src.datasets.ts_dataset  import TSDataset

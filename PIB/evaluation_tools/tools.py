@@ -2,7 +2,7 @@ import os
 import os.path as osp
 import torch
 import numpy as np
-from PIB.train.design_interface import MInterface
+from PIB.evaluation_tools.design_interface import MInterface
 import json
 from transformers import AutoTokenizer
 from sklearn.metrics import f1_score
@@ -102,6 +102,7 @@ def reload_model(data_name,model_name):
     config['res_dir'] = 'PIB/evaluation_tools'
     config['data_root'] = '/data/cath4.3'
     config['pretrained_path'] = osp.join(config['res_dir'],  config['ex_name'],'checkpoint.pth')
+    config['config_path'] = osp.join(config['res_dir'],  config['ex_name'],f'{model_name}.yaml')
     model = MInterface(**config)
     model.eval()
     return model
